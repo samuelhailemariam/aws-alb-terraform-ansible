@@ -1,0 +1,22 @@
+---
+# aws ec2 ansible dynamic inventory plugin
+plugin: aws_ec2
+
+regions:
+  - us-west-2
+
+iam_role_arn: arn:aws:iam::120106008631:role/projectworkshop-admin
+
+keyed_groups:
+  # add hosts to tag_Name_value groups for each aws_ec2 host's tags.Name variable
+  - key: tags.Name
+    prefix: tag_Name_
+    separator: ''
+
+hostnames:
+  - ip-address
+  - tag:Name
+  - private-ip-address
+  - dns-name
+
+strict_permissions: False

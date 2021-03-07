@@ -1,0 +1,31 @@
+---
+- name: apache-install
+  hosts: '{{ passed_in_hosts }}'
+  become: yes
+  remote_user: ec2-user
+  become_user: root
+  gather_facts: false
+  handlers:
+    - name: restart_web
+      systemd:
+        name: httpd
+        state: restarted
+
+  tasks:
+    - name: install apache
+      yum:
+        name: httpd
+        state: latest
+
+    - name: enable httpd
+      service:
+        name: httpd
+        enabled: yes
+      notify: restart_web
+
+    - name: index
+      copy:
+        content: 'Welcome to Apache Deployment!!'
+        dest: '/var/www/html/index.html'
+        mode: '640'
+        group: apache
